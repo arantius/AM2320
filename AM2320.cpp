@@ -37,11 +37,12 @@ int AM2320::Read()
 	Wire.write(0x03);// запрос
 	Wire.write(0x00); // с 0-го адреса
 	Wire.write(0x04); // 4 байта
-	if (Wire.endTransmission(1) != 0) return 1;
+	if (Wire.endTransmission() != 0) return 1;
 	delayMicroseconds(1600); //>1.5ms
 	// считываем результаты запроса
 	Wire.requestFrom(AM2320_address, 0x08); 
 	for (int i = 0; i < 0x08; i++) buf[i] = Wire.read();
+	if (Wire.endTransmission() != 0) return 1;
 
 	// CRC check
 	unsigned int Rcrc = buf[7] << 8;
